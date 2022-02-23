@@ -145,6 +145,10 @@ export default () => {
         );
         physicsIds.push(physicsId);
 
+        app.updateMatrixWorld()
+        app.physicsObjects[0].position.copy(app.position)
+        physicsManager.setTransform(app.physicsObjects[0])
+
     });
 
     useFrame(( { timeDiff } ) => {
@@ -158,7 +162,7 @@ export default () => {
           if(sitSpec.mountType === "flying") {
             vehicle = app.physicsObjects[0];
             localPlayer.avatar.app.visible = false;
-            physics.enablePhysicsObject(vehicle);
+            physics.enableGeometry(vehicle);
             let quat = new THREE.Quaternion(vehicle.quaternion.x, vehicle.quaternion.y, vehicle.quaternion.z, vehicle.quaternion.w);
             let right = new THREE.Vector3(1, 0, 0).applyQuaternion(quat);
             let globalUp = new THREE.Vector3(0, 1, 0);
@@ -274,6 +278,9 @@ export default () => {
     });
 
     useActivate(() => {
+
+      app.physicsObjects[0].rotation.set(0,0,0)
+      physicsManager.setTransform(app.physicsObjects[0])
 
       sitSpec = app.getComponent('sit');
       if (sitSpec) {
